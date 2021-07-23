@@ -1,15 +1,43 @@
 <template>
-  <div class="home flex-grow-1 d-flex flex-column align-items-center justify-content-center">
-    <img src="https://bcw.blob.core.windows.net/public/img/8600856373152463" alt="CodeWorks Logo">
-    <h1 class="my-5 bg-dark text-light p-3 rounded d-flex align-items-center">
-      <span class="mx-2 text-white">Vue 3 Starter</span>
-    </h1>
+  <div class=" text-light home flex-grow-1 d-flex flex-column justify-content-center">
+    <div class="container-fluid">
+      <div v-if="filteredResults?.length > 0" class="row">
+        Filtered Array
+        <div v-for="r in filteredResults" :key="r" class="col-3 img">
+          {{ r }}
+          <img class="img-fluid" :src="r" />
+        </div>
+      </div>
+      <div v-else-if="filteredResults" class="row">
+        Filtered
+        {{ filteredResults }}
+      </div>
+      <div v-else class="row">
+        RAW
+        <pre class=" text-left">
+        <code class="text-light bg-fade-dark rounded">
+        {{ JSON.stringify(results, null, 2) }}
+        </code>
+        </pre>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import { reactive } from '@vue/reactivity'
+import { computed } from '@vue/runtime-core'
+import { AppState } from '../AppState'
+import { apiService } from '../services/AxiosService'
+import { logger } from '../utils/Logger'
 export default {
-  name: 'Home'
+  name: 'Home',
+  setup() {
+    return {
+      results: computed(() => AppState.results),
+      filteredResults: computed(() => AppState.filteredResults)
+    }
+  }
 }
 </script>
 
